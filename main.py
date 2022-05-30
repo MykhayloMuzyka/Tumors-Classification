@@ -8,14 +8,19 @@ from PIL import Image
 from algo import *
 from shortcuts import *
 
-tick = pg.image.load(r'tick.png')
+WIDTH = pg.display.set_mode().get_width()
+HEIGHT = pg.display.set_mode().get_height()
+pg.init()
+screen = pg.display.set_mode((WIDTH, HEIGHT))
+
+tick = pg.image.load('tick.png')
 tick = pg.transform.scale(tick, (30, 30))
 
-cross = pg.image.load(r'cross.jpg')
+cross = pg.image.load('cross.jpg')
 cross = pg.transform.scale(cross, (30, 30))
 
-arrow = pg.image.load(r'arrow.png')
-arrow = pg.transform.scale(arrow, (30, 30))
+yellow_arrow = pg.image.load('yellow_arrow.png')
+yellow_arrow = pg.transform.scale(yellow_arrow, (30, 30))
 
 
 def pass_func():
@@ -86,7 +91,7 @@ def steps_list():
         if i < step_idx:
             sprite = tick
         elif i == step_idx:
-            sprite = arrow
+            sprite = yellow_arrow
         else:
             sprite = cross
         screen.blit(sprite, (WIDTH - 300, (i + 1) * 50))
@@ -95,24 +100,6 @@ def steps_list():
         screen.blit(txt_surface, (WIDTH - 300 + sprite.get_width() + 20, (i + 1) * 50 + 10))
 
 
-# def draw_arrow(position, width, height, color, img):
-#     contour_points = list()
-#     start_x, start_y = position
-#     contour_points.append((start_x, int(start_y+0.25*height)))
-#     contour_points.append((int(start_x+0.7*width), int(start_y+0.25*height)))
-#     contour_points.append((int(start_x+0.7*width), start_y))
-#     contour_points.append((start_x+width, start_y-height//2))
-#     contour_points.append((int(start_x + 0.7 * width), start_y + width))
-#     contour_points.append(contour_points.append((int(start_x+0.7*width), int(start_y+0.75*height))))
-#     contour_points.append((start_x, int(start_y + 0.75 * height)))
-#     contour_points.append((start_x, int(start_y + 0.25 * height)))
-#     res_img = cv2.drawContours(img, np.array([contour_points]), -1, color=color, thickness=cv2.FILLED)
-
-
-WIDTH = pg.display.set_mode().get_width()
-HEIGHT = pg.display.set_mode().get_height()
-pg.init()
-screen = pg.display.set_mode((WIDTH, HEIGHT))
 name = None
 image_format = None
 step = 'uploading'
@@ -372,6 +359,11 @@ while True:
 
         screen.blit(scoped_image, (int((first_rect.width - scoped_image.get_width()) // 2 + first_rect.x),
                     int((first_rect.height - scoped_image.get_height()) // 2 + first_rect.y)))
+
+        arrow = pg.image.load('arrow.jpg')
+        arrow = pg.transform.scale(arrow, (screen_rect.width * 0.1, screen_rect.width * 0.1))
+        screen.blit(arrow, (int(screen_rect.x + screen_rect.width * 0.45),
+                            int(screen_rect.y + screen_rect.height * 0.3)))
 
         screen.blit(result_image, (int((second_rect.width - result_image.get_width()) // 2 + second_rect.x),
                     int((first_rect.height - result_image.get_height()) // 2 + second_rect.y)))
