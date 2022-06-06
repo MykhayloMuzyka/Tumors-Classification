@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import *
 from tkinter import filedialog
 
 import win32api
@@ -7,19 +6,21 @@ from PIL import Image
 
 from algo import *
 from shortcuts import *
+from sounds import *
 
 WIDTH = pg.display.set_mode().get_width()
 HEIGHT = pg.display.set_mode().get_height()
 pg.init()
+pg.mixer.init()
 screen = pg.display.set_mode((WIDTH, HEIGHT))
 
-tick = pg.image.load('tick.png')
+tick = pg.image.load('Sprites/tick.png')
 tick = pg.transform.scale(tick, (30, 30))
 
-cross = pg.image.load('cross.jpg')
+cross = pg.image.load('Sprites/cross.jpg')
 cross = pg.transform.scale(cross, (30, 30))
 
-yellow_arrow = pg.image.load('yellow_arrow.png')
+yellow_arrow = pg.image.load('Sprites/yellow_arrow.png')
 yellow_arrow = pg.transform.scale(yellow_arrow, (30, 30))
 
 
@@ -52,7 +53,7 @@ def upload_file():
     f_types = [('JPG Files', '*.jpg'),
                ('PNG Files', '*.png'),
                ('JPEG Files', '*.jpeg')]  # type of files to select
-    filename = tk.filedialog.askopenfilename(filetypes=f_types)
+    filename = filedialog.askopenfilename(filetypes=f_types)
     try:
         img = Image.open(filename)
         pg_img = pg.image.load(filename)
@@ -324,6 +325,7 @@ while True:
                 active=False
             ).draw(surface=screen)
         classification_finished = False
+        # sound_played = False
 
     elif step == 'classification':
         if not classification_finished:
@@ -355,12 +357,12 @@ while True:
         result_image = pg.transform.scale(result_image,
                                           (result_image.get_width() * scale, result_image.get_height() * scale))
         scoped_image = pg.transform.scale(scoped_image,
-                                          (scoped_image.get_width() * scale, scoped_image.get_height() * scale))
+                                          (result_image.get_width(), result_image.get_height()))
 
         screen.blit(scoped_image, (int((first_rect.width - scoped_image.get_width()) // 2 + first_rect.x),
                     int((first_rect.height - scoped_image.get_height()) // 2 + first_rect.y)))
 
-        arrow = pg.image.load('arrow.jpg')
+        arrow = pg.image.load('Sprites/arrow.jpg')
         arrow = pg.transform.scale(arrow, (screen_rect.width * 0.1, screen_rect.width * 0.1))
         screen.blit(arrow, (int(screen_rect.x + screen_rect.width * 0.45),
                             int(screen_rect.y + screen_rect.height * 0.3)))
@@ -375,9 +377,15 @@ while True:
         if predicted_class == 0:
             text = 'BENIGN'
             color = (0, 255, 0)
+            # if not sound_played:
+            #     benign_sound.play()
+            #     sound_played = True
         elif predicted_class == 1:
             text = 'MALIGNANT'
             color = (255, 0, 0)
+            # if not sound_played:
+            #     malignant_sound.play()
+            #     sound_played = True
         else:
             text = 'ADDITIONAL EXAMINATION'
             color = (255, 165, 0)

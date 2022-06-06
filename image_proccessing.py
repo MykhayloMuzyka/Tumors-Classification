@@ -181,7 +181,7 @@ class Photo:
         self.symmetry_worst = np.mean(sorted(symmetries)[-3:])
 
         steps = (1, 2, 3, 4, 5, 6, 9, 10, 12, 15, 18, 20)
-        fractal_dimensions = list()
+        self.fractal_dimensions = list()
 
         # uncomment to draw fractal dimension
         for step in steps:
@@ -196,13 +196,13 @@ class Photo:
                     L += distance(intersections[i], intersections[0])
                     # cv2.line(step_img, (int(intersections[i][0]), int(intersections[i][1])),
                     #          (int(intersections[0][0]), int(intersections[0][1])), (0, 255, 0), 4)
-            fractal_dimensions.append(L)
+            self.fractal_dimensions.append(L)
             # cv2.imshow(f'step={step}', step_img)
             # cv2.waitKey(0)
 
-        self.fractal_dimension_mean = np.mean(fractal_dimensions)
-        self.fractal_dimension_se = standard_error(fractal_dimensions)
-        self.fractal_dimension_worst = np.mean(sorted(fractal_dimensions)[-3:])
+        self.fractal_dimension_mean = np.mean(self.fractal_dimensions)
+        self.fractal_dimension_se = standard_error(self.fractal_dimensions)
+        self.fractal_dimension_worst = np.mean(sorted(self.fractal_dimensions)[-3:])
 
         # uncomment to draw contour
         # cv2.drawContours(img, [contour], 0, (0, 255, 0), 3)
@@ -233,6 +233,14 @@ class Photo:
         # plt.show()
 
 
-# img_path = os.path.join(images_dir, 'benign/benign (9)_mask.png')
-# img = cv2.imread(img_path)
-# img = Photo(img)
+# img_path_b = os.path.join(images_dir, 'benign/benign (9)_mask.png')
+# img_path_m = os.path.join(images_dir, 'malignant/malignant (1)_mask.png')
+# img_b = cv2.imread(img_path_b)
+# img_m = cv2.imread(img_path_m)
+# img_b = Photo(img_b)
+# img_m = Photo(img_m)
+# plt.plot([i for i in range(len(img_m.fractal_dimensions))], img_m.fractal_dimensions, label='Malignant', c='r')
+# plt.plot([i for i in range(len(img_b.fractal_dimensions))], img_b.fractal_dimensions, label='Benign', c='g')
+# plt.legend()
+# plt.grid(True)
+# plt.show()
